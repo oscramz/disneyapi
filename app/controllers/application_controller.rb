@@ -8,6 +8,10 @@ def authenticate_request
   header = request.headers['Autorization']
   header = header.split(' ').last if header
   decoded = jwt_decode(header)
-  @current_usuario = Usuario.find(decoded[:usuario_id])
+  if decoded == "Token not found"
+    render json: { error: 'Not authenticated' }, status: :unauthorized
+  else
+    @current_usuario = Usuario.find(decoded[:usuario_id])
+  end
 end
 end
